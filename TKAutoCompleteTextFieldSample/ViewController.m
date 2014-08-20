@@ -17,13 +17,28 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+    self.textField.suggestions = [self resourse];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (NSArray *)resourse
+{
+    static dispatch_once_t onceToken;
+    static NSArray *__instance = nil;
+    dispatch_once(&onceToken, ^{
+        __instance = [self loadArray];
+    });
+    return __instance;
+}
+
+- (NSArray *)loadArray
+{
+    return [NSArray arrayWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"NYY" ofType:@"plist"]];
 }
 
 @end

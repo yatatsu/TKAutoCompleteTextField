@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TKAutoCompleteTextField.h"
 
 @interface ViewController : UIViewController
+
+@property (nonatomic, weak) IBOutlet TKAutoCompleteTextField *textField;
 
 @end
