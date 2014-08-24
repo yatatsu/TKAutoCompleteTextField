@@ -184,18 +184,27 @@ static NSString *kObserverKeyMatchSuggestions = @"matchSuggestions";
 - (void)suggestionView:(UITableView *)suggestionView updateFrameWithSuggestions:(NSArray *)suggestions
 {
     CGRect frame = suggestionView.frame;
-    frame.size.height = [self heightForSuggestionView:suggestionView];
+    frame.size.height = [self heightForSuggestionView:suggestionView suggestionsCount:suggestions.count];
     suggestionView.frame = frame;
 }
 
-- (CGFloat)heightForSuggestionView:(UITableView *)suggestionView
+- (CGFloat)heightForSuggestionView:(UITableView *)suggestionView suggestionsCount:(NSInteger)count
 {
-    if ([self.dataSource respondsToSelector:@selector(heightForSuggestionView:)]) {
-        return [self.dataSource heightForSuggestionView:suggestionView];
+    CGFloat height = 0.f;
+    NSInteger rowCount = [self numberOfVisibleRowInSuggestionView:suggestionView];
+    if (rowCount > count) {
+        rowCount = count;
     } else {
-        NSInteger rowCount = [self numberOfVisibleRowInSuggestionView:suggestionView];
-        return rowCount * suggestionView.rowHeight + kBufferHeightForSuggestionView + self.frame.size.height;
+        height += kBufferHeightForSuggestionView;
     }
+    height += rowCount * suggestionView.rowHeight + self.frame.size.height;
+    if ([self.dataSource respondsToSelector:@selector(heightForSuggestionView:)]) {
+        CGFloat maxHeight = [self.dataSource heightForSuggestionView:suggestionView];
+        if (maxHeight < height) {
+            height = maxHeight;
+        }
+    }
+    return height;
 }
 
 - (NSInteger)numberOfVisibleRowInSuggestionView:(UITableView *)suggestionView
