@@ -19,6 +19,7 @@ static NSString *kObserverKeyMatchSuggestions = @"matchSuggestions";
 
 @property (nonatomic, strong, readwrite) UITableView *suggestionView;
 @property (nonatomic, strong) NSMutableArray *matchSuggestions;
+
 @property (nonatomic, strong) NSOperationQueue *queue;
 
 @end
@@ -117,8 +118,8 @@ static NSString *kObserverKeyMatchSuggestions = @"matchSuggestions";
     __weak typeof(self) wself = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         [wself suggestionView:wself.suggestionView updateFrameWithSuggestions:wself.matchSuggestions];
-        [wself.suggestionView reloadData];
         wself.suggestionView.hidden = NO;
+        [wself.suggestionView reloadData];
     });
 }
 
@@ -157,8 +158,7 @@ static NSString *kObserverKeyMatchSuggestions = @"matchSuggestions";
     [operation setCompletionBlock:^{
         if (weakOperation.isCancelled) return;
         
-        [wself.matchSuggestions removeAllObjects];
-        [wself.matchSuggestions addObjectsFromArray:resultSuggestions];
+        wself.matchSuggestions = resultSuggestions;
     }];
 
     [self.queue addOperation:operation];
@@ -176,11 +176,9 @@ static NSString *kObserverKeyMatchSuggestions = @"matchSuggestions";
     suggestionView.delegate = self;
     suggestionView.dataSource = self;
     suggestionView.scrollEnabled = YES;
+    suggestionView.hidden = YES;
     
     self.suggestionView = suggestionView;
-    
-    self.suggestionView.hidden = YES;
-    [self addSubview:suggestionView];
 }
 
 - (void)suggestionView:(UITableView *)suggestionView updateFrameWithSuggestions:(NSArray *)suggestions
@@ -209,11 +207,27 @@ static NSString *kObserverKeyMatchSuggestions = @"matchSuggestions";
     }
 }
 
+- (void)showSuggestionView
+{
+    [self.superview bringSubviewToFront:self];
+    UIView *rootView = self.window.subviews[0];
+    [rootView insertSubview:self.suggestionView
+               belowSubview:self];
+}
+
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.matchSuggestions.count;
+    NSInteger count = self.matchSuggestions.count;
+    // show tableView
+    if (count) {
+        [self showSuggestionView];
+    } else {
+        // TODO: dismiss
+    }
+    return count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
