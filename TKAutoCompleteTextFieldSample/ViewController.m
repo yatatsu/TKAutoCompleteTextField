@@ -8,7 +8,7 @@
 
 #import "ViewController.h"
 
-@interface ViewController ()
+@interface ViewController () <TKAutoCompleteTextFieldDataSource, TKAutoCompleteTextFieldDelegate>
 
 @end
 
@@ -39,6 +39,20 @@
 - (NSArray *)loadArray
 {
     return [NSArray arrayWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"NYY" ofType:@"plist"]];
+}
+
+#pragma mark - TKAutoCompleteTextFieldDelegate
+
+- (void)TKAutoCompleteTextField:(TKAutoCompleteTextField *)textField
+            didSelectSuggestion:(NSString *)suggestion
+{
+    NSLog(@">>> didSelectSuggestion: %@", suggestion);
+}
+
+- (void)TKAutoCompleteTextField:(TKAutoCompleteTextField *)textField
+  didFillAutoCompleteWithSuggestion:(NSString *)suggestion
+{
+    NSLog(@">>> didFillAutoCompleteWithSuggestion: %@", suggestion);
 }
 
 @end

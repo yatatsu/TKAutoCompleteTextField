@@ -22,8 +22,8 @@
 @property (nonatomic, assign) BOOL enableStrictFirstMatch; // NO in default
 
 // delegate
-@property (nonatomic, weak) id<TKAutoCompleteTextFieldDataSource> dataSource;
-@property (nonatomic, weak) id<TKAutoCompleteTextFieldDelegate> delegate;
+@property (nonatomic, weak) id<TKAutoCompleteTextFieldDataSource> autoCompleteDataSource;
+@property (nonatomic, weak) id<TKAutoCompleteTextFieldDelegate> autoCompleteDelegate;
 
 @property (nonatomic, strong) NSArray *suggestions;
 

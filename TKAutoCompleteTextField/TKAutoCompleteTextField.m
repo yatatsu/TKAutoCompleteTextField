@@ -19,8 +19,8 @@ static NSString *kObserverKeyMatchSuggestions = @"matchSuggestions";
 
 @property (nonatomic, strong, readwrite) UITableView *suggestionView;
 @property (nonatomic, strong) NSMutableArray *matchSuggestions;
-
 @property (nonatomic, strong) NSOperationQueue *queue;
+@property (nonatomic, assign, getter = isInputFromSuggestion) BOOL inputFromSuggestion;
 
 @end
 
@@ -60,6 +60,7 @@ static NSString *kObserverKeyMatchSuggestions = @"matchSuggestions";
     self.suggestions = [NSArray new];
     self.matchSuggestions = [NSMutableArray array];
     self.queue = [NSOperationQueue new];
+    self.inputFromSuggestion = NO;
     
     [self configureSuggestionView];
 }
@@ -109,6 +110,10 @@ static NSString *kObserverKeyMatchSuggestions = @"matchSuggestions";
 
 - (void)textFieldDidChangeNotification:(NSNotification *)notification
 {
+    if ([self isInputFromSuggestion]) {
+        self.inputFromSuggestion = NO;
+        return;
+    }
     [self cancelSearchOperation];
     [self searchSuggestionWithInput:self.text];
 }
@@ -198,8 +203,8 @@ static NSString *kObserverKeyMatchSuggestions = @"matchSuggestions";
         height += kBufferHeightForSuggestionView;
     }
     height += rowCount * suggestionView.rowHeight + self.frame.size.height;
-    if ([self.dataSource respondsToSelector:@selector(heightForSuggestionView:)]) {
-        CGFloat maxHeight = [self.dataSource heightForSuggestionView:suggestionView];
+    if ([self.autoCompleteDataSource respondsToSelector:@selector(heightForSuggestionView:)]) {
+        CGFloat maxHeight = [self.autoCompleteDataSource heightForSuggestionView:suggestionView];
         if (maxHeight < height) {
             height = maxHeight;
         }
@@ -209,8 +214,8 @@ static NSString *kObserverKeyMatchSuggestions = @"matchSuggestions";
 
 - (NSInteger)numberOfVisibleRowInSuggestionView:(UITableView *)suggestionView
 {
-    if ([self.dataSource respondsToSelector:@selector(numberOfVisibleRowInSuggestionView:)]) {
-        return [self.dataSource numberOfVisibleRowInSuggestionView:suggestionView];
+    if ([self.autoCompleteDataSource respondsToSelector:@selector(numberOfVisibleRowInSuggestionView:)]) {
+        return [self.autoCompleteDataSource numberOfVisibleRowInSuggestionView:suggestionView];
     } else {
         return kDefaultNumberOfVisibleRowInSuggestionView;
     }
@@ -262,7 +267,19 @@ static NSString *kObserverKeyMatchSuggestions = @"matchSuggestions";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // TODO
+    NSString *suggestion = self.matchSuggestions[indexPath.row];
+    if ([self.autoCompleteDelegate respondsToSelector:@selector(TKAutoCompleteTextField:didSelectSuggestion:)]) {
+        [self.autoCompleteDelegate TKAutoCompleteTextField:self didSelectSuggestion:suggestion];
+    }
+
+    self.text = suggestion;
+    self.inputFromSuggestion = YES;
+    [self.suggestionView deselectRowAtIndexPath:indexPath animated:NO];
+    self.matchSuggestions = [NSMutableArray array];
+    
+    if ([self.autoCompleteDelegate respondsToSelector:@selector(TKAutoCompleteTextField:didFillAutoCompleteWithSuggestion:)]) {
+        [self.autoCompleteDelegate TKAutoCompleteTextField:self didFillAutoCompleteWithSuggestion:suggestion];
+    }
 }
 
 @end

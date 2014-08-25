@@ -13,6 +13,7 @@
 @protocol TKAutoCompleteTextFieldDelegate <NSObject>
 
 @optional
-- (void)TKAutoCompleteTextField:(TKAutoCompleteTextField *)textField didSelectSuggestionRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void)TKAutoCompleteTextField:(TKAutoCompleteTextField *)textField didSelectSuggestion:(NSString *)suggestion;
+- (void)TKAutoCompleteTextField:(TKAutoCompleteTextField *)textField didFillAutoCompleteWithSuggestion:(NSString *)suggestion;
 
 @end
