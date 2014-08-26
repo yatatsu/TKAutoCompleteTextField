@@ -10,10 +10,13 @@
 
 static NSInteger kDefaultNumberOfVisibleRowInSuggestionView = 3;
 static CGFloat kDefaultHeightForRowInSuggestionView = 30.f;
-static CGFloat kBufferHeightForSuggestionView = 10.f;
+static CGFloat kBufferHeightForSuggestionView = 15.f;
 
 static NSString *kCellIdentifier = @"cell";
 static NSString *kObserverKeyMatchSuggestions = @"matchSuggestions";
+static NSString *kObserverKeyBorderStyle = @"borderStyle";
+static NSString *kObserverKeyEnableAutoComplete = @"enableAutoComplete";
+static NSString *kObserverKeyEnableStrictFirstMatch = @"enableStrictFirstMatch";
 
 @interface TKAutoCompleteTextField () <UITableViewDataSource, UITableViewDelegate>
 
@@ -61,8 +64,17 @@ static NSString *kObserverKeyMatchSuggestions = @"matchSuggestions";
     self.matchSuggestions = [NSMutableArray array];
     self.queue = [NSOperationQueue new];
     self.inputFromSuggestion = NO;
+    self.enableAutoComplete = YES;
+    self.enableStrictFirstMatch = NO;
     
     [self configureSuggestionView];
+}
+
+- (void)dealloc
+{
+    self.matchSuggestions = nil;
+    [self stopObserving];
+    [self removeSuggestionView];
 }
 
 #pragma mark - Observation
@@ -77,19 +89,42 @@ static NSString *kObserverKeyMatchSuggestions = @"matchSuggestions";
            forKeyPath:kObserverKeyMatchSuggestions
               options:NSKeyValueObservingOptionNew
               context:nil];
+
+    [self addObserver:self
+           forKeyPath:kObserverKeyBorderStyle
+              options:NSKeyValueObservingOptionNew
+              context:nil];
     
+    [self addObserver:self
+           forKeyPath:kObserverKeyEnableAutoComplete
+              options:NSKeyValueObservingOptionNew
+              context:nil];
+    
+    [self addObserver:self
+           forKeyPath:kObserverKeyEnableStrictFirstMatch
+              options:NSKeyValueObservingOptionNew
+              context:nil];
 }
 
 - (void)stopObserving
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self removeObserver:self forKeyPath:kObserverKeyMatchSuggestions];
+    [self removeObserver:self forKeyPath:kObserverKeyBorderStyle];
+    [self removeObserver:self forKeyPath:kObserverKeyEnableAutoComplete];
+    [self removeObserver:self forKeyPath:kObserverKeyEnableStrictFirstMatch];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if ([keyPath compare:kObserverKeyMatchSuggestions] == NSOrderedSame) {
         [self didChangeMatchSuggestions];
+    } else if ([keyPath compare:kObserverKeyBorderStyle] == NSOrderedSame) {
+        [self didChangeTextFieldBorderStyle];
+    } else if ([keyPath compare:kObserverKeyEnableAutoComplete] == NSOrderedSame) {
+        [self didChangeEnableAutoComplete];
+    } else if ([keyPath compare:kObserverKeyEnableStrictFirstMatch] == NSOrderedSame) {
+        [self didChangeEnableStrictFirstMatch];
     }
 }
 
@@ -103,8 +138,8 @@ static NSString *kObserverKeyMatchSuggestions = @"matchSuggestions";
 
 - (BOOL)resignFirstResponder
 {
-    self.suggestionView.hidden = YES;
     [self stopObserving];
+    [self removeSuggestionView];
     return [super resignFirstResponder];
 }
 
@@ -120,12 +155,45 @@ static NSString *kObserverKeyMatchSuggestions = @"matchSuggestions";
 
 - (void)didChangeMatchSuggestions
 {
+    if (!self.enableAutoComplete) {
+        return;
+    }
     __weak typeof(self) wself = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         [wself suggestionView:wself.suggestionView updateFrameWithSuggestions:wself.matchSuggestions];
         wself.suggestionView.hidden = NO;
         [wself.suggestionView reloadData];
     });
+}
+
+- (void)didChangeTextFieldBorderStyle
+{
+    [self configureSuggestionViewForBorderStyle:self.borderStyle];
+    __weak typeof(self) wself = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [wself.suggestionView reloadData];
+    });
+}
+
+- (void)didChangeEnableAutoComplete
+{
+    if (self.enableAutoComplete) {
+        if ([self isFirstResponder]) {
+            [self startObserving];
+        }
+    } else {
+        [self cancelSearchOperation];
+        [self stopObserving];
+        [self removeSuggestionView];
+    }
+}
+
+- (void)didChangeEnableStrictFirstMatch
+{
+    if ([self isFirstResponder]) {
+        [self cancelSearchOperation];
+        [self searchSuggestionWithInput:self.text];
+    }
 }
 
 #pragma mark - fetch suggestion
@@ -151,14 +219,15 @@ static NSString *kObserverKeyMatchSuggestions = @"matchSuggestions";
                 [suggestions enumerateObjectsUsingBlock:^(NSString *suggestion, NSUInteger idx, BOOL *stop) {
                     NSRange range = [[suggestion lowercaseString] rangeOfString:[input lowercaseString]];
                     if (range.location != NSNotFound) {
-                        [resultSuggestions addObject:suggestion];
+                        if (wself.enableStrictFirstMatch && range.location > 0) {
+                            return;
+                        } else {
+                            [resultSuggestions addObject:suggestion];
+                        }
                     }
                 }];
             }
-        } else {
-            [resultSuggestions addObjectsFromArray:suggestions];
         }
-        
     }];
     [operation setCompletionBlock:^{
         if (weakOperation.isCancelled) return;
@@ -178,6 +247,7 @@ static NSString *kObserverKeyMatchSuggestions = @"matchSuggestions";
     UITableView *suggestionView = [[UITableView alloc] initWithFrame:frame
                                                                style:UITableViewStylePlain];
     suggestionView.rowHeight = frame.size.height ?: kDefaultHeightForRowInSuggestionView;
+    suggestionView.separatorStyle = UITableViewCellSeparatorStyleNone;
     suggestionView.delegate = self;
     suggestionView.dataSource = self;
     suggestionView.scrollEnabled = YES;
@@ -202,7 +272,10 @@ static NSString *kObserverKeyMatchSuggestions = @"matchSuggestions";
     } else {
         height += kBufferHeightForSuggestionView;
     }
-    height += rowCount * suggestionView.rowHeight + self.frame.size.height;
+    height += rowCount * suggestionView.rowHeight;
+    if (self.borderStyle != UITextBorderStyleNone) {
+        height += self.frame.size.height;
+    }
     if ([self.autoCompleteDataSource respondsToSelector:@selector(heightForSuggestionView:)]) {
         CGFloat maxHeight = [self.autoCompleteDataSource heightForSuggestionView:suggestionView];
         if (maxHeight < height) {
@@ -223,30 +296,89 @@ static NSString *kObserverKeyMatchSuggestions = @"matchSuggestions";
 
 - (void)showSuggestionView
 {
+    [self configureSuggestionViewForBorderStyle:self.borderStyle];
     [self.superview bringSubviewToFront:self];
     UIView *rootView = self.window.subviews[0];
     [rootView insertSubview:self.suggestionView
                belowSubview:self];
 }
 
+- (void)removeSuggestionView
+{
+    [self.suggestionView removeFromSuperview];
+}
+
+#pragma mark - UITextBorderStyle
+
+- (void)configureSuggestionViewForBorderStyle:(UITextBorderStyle)borderStyle
+{
+    switch (borderStyle) {
+        case UITextBorderStyleRoundedRect:
+            [self setBorderStyleRoundedRect];
+            break;
+        case UITextBorderStyleBezel:
+            [self setBorderStyleBezel];
+            break;
+        case UITextBorderStyleLine:
+            [self setBorderStyleLine];
+            break;
+        case UITextBorderStyleNone:
+            [self setBorderStyleNone];
+            break;
+    }
+}
+
+- (void)setBorderStyleRoundedRect
+{
+    CGFloat offsetHeight = self.frame.size.height;
+    [self.suggestionView.layer setCornerRadius:8.0];
+    [self.suggestionView setScrollIndicatorInsets:UIEdgeInsetsMake(offsetHeight, 0, 0, 0)];
+    [self.suggestionView setContentInset:UIEdgeInsetsMake(offsetHeight, 0, 0, 0)];
+    [self.suggestionView.layer setBorderWidth:0.5];
+    [self.suggestionView.layer setBorderColor:[UIColor lightGrayColor].CGColor];
+}
+
+- (void)setBorderStyleBezel
+{
+    CGFloat offsetHeight = self.frame.size.height;
+    [self.suggestionView.layer setCornerRadius:0.0];
+    [self.suggestionView setScrollIndicatorInsets:UIEdgeInsetsMake(offsetHeight, 0, 0, 0)];
+    [self.suggestionView setContentInset:UIEdgeInsetsMake(offsetHeight, 0, 0, 0)];
+    [self.suggestionView.layer setBorderWidth:0.5];
+    [self.suggestionView.layer setBorderColor:[UIColor lightGrayColor].CGColor];
+}
+
+- (void)setBorderStyleLine
+{
+    CGFloat offsetHeight = self.frame.size.height;
+    [self.suggestionView.layer setCornerRadius:0.0];
+    [self.suggestionView setScrollIndicatorInsets:UIEdgeInsetsMake(offsetHeight, 0, 0, 0)];
+    [self.suggestionView setContentInset:UIEdgeInsetsMake(offsetHeight, 0, 0, 0)];
+    [self.suggestionView.layer setBorderWidth:0.5];
+    [self.suggestionView.layer setBorderColor:[UIColor lightGrayColor].CGColor];
+}
+
+- (void)setBorderStyleNone
+{
+    CGFloat offsetHeight = self.frame.size.height;
+    [self.suggestionView.layer setCornerRadius:0.0];
+    [self.suggestionView setScrollIndicatorInsets:UIEdgeInsetsZero];
+    CGRect frame = self.suggestionView.frame;
+    frame.origin.y = self.frame.origin.y + offsetHeight;
+    self.suggestionView.frame = frame;
+    [self.suggestionView.layer setBorderWidth:0.5];
+    [self.suggestionView.layer setBorderColor:[UIColor lightGrayColor].CGColor];
+}
 
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     NSInteger count = self.matchSuggestions.count;
-    // show tableView
     if (count) {
         [self showSuggestionView];
-    } else {
-        // TODO: dismiss
     }
     return count;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return self.frame.size.height;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -259,6 +391,7 @@ static NSString *kObserverKeyMatchSuggestions = @"matchSuggestions";
     
     if (self.matchSuggestions.count > indexPath.row) {
         cell.textLabel.text = self.matchSuggestions[indexPath.row];
+        cell.textLabel.font = self.font;
     }
     return cell;
 }

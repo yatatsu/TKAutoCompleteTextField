@@ -18,6 +18,7 @@
 {
     [super viewDidLoad];
     self.textField.suggestions = [self resourse];
+    self.textField.enableStrictFirstMatch = YES;
 }
 
 - (void)didReceiveMemoryWarning

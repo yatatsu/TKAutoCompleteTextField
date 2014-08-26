@@ -17,8 +17,6 @@
 
 // options
 @property (nonatomic, assign) BOOL enableAutoComplete; // YES in default
-@property (nonatomic, assign) BOOL showSuggestStringInTextField; // YES in default
-@property (nonatomic, assign) BOOL enableBoldFontForMatchText; // YES in default
 @property (nonatomic, assign) BOOL enableStrictFirstMatch; // NO in default
 
 // delegate
