@@ -8,6 +8,12 @@
 
 #import "ViewController.h"
 
+typedef NS_ENUM(NSInteger, TKAutoCompleteSampleType) {
+    TKAutoCompleteSampleTypeRoundRect = 1,
+    TKAutoCompleteSampleTypeBorderNone,
+    TKAutoCompleteSampleTypeLine,
+};
+
 @interface ViewController () <TKAutoCompleteTextFieldDataSource, TKAutoCompleteTextFieldDelegate>
 
 @end
@@ -17,14 +23,31 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.textField.suggestions = [self resourse];
-    self.textField.enableStrictFirstMatch = YES;
+    
+    // sample 1
+    self.textFieldSample1.suggestions = [self resourse];
+    self.textFieldSample1.enableStrictFirstMatch = NO;
+    
+    // sample 2
+    self.textFieldSample2.suggestions = [self prefecture];
+    self.textFieldSample2.enableStrictFirstMatch = NO;
+    
+    // sample 3
+    self.textFieldSample3.suggestions = [self resourse];
+    self.textFieldSample3.autoCompleteDelegate = self;
+    self.textFieldSample3.autoCompleteDataSource = self;
+    self.textFieldSample3.enableStrictFirstMatch = YES;
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (IBAction)didTapCancelButton:(id)sender
+{
+    [self.view endEditing:YES];
 }
 
 - (NSArray *)resourse
@@ -37,9 +60,24 @@
     return __instance;
 }
 
+- (NSArray *)prefecture
+{
+    static dispatch_once_t onceToken;
+    static NSArray *__instance = nil;
+    dispatch_once(&onceToken, ^{
+        __instance = [self loadPrefecture];
+    });
+    return __instance;
+}
+
 - (NSArray *)loadArray
 {
     return [NSArray arrayWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"NYY" ofType:@"plist"]];
+}
+
+- (NSArray *)loadPrefecture
+{
+    return [NSArray arrayWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Japanese" ofType:@"plist"]];
 }
 
 #pragma mark - TKAutoCompleteTextFieldDelegate
@@ -54,6 +92,20 @@
   didFillAutoCompleteWithSuggestion:(NSString *)suggestion
 {
     NSLog(@">>> didFillAutoCompleteWithSuggestion: %@", suggestion);
+}
+
+#pragma mark = TKAutoCompleteTextFieldDataSource
+
+- (CGFloat)TKAutoCompleteTextField:(TKAutoCompleteTextField *)textField
+           heightForSuggestionView:(UITableView *)suggestionView
+{
+    return 150.f;
+}
+
+- (NSInteger)TKAutoCompleteTextField:(TKAutoCompleteTextField *)textField
+  numberOfVisibleRowInSuggestionView:(UITableView *)suggestionView
+{
+    return 2;
 }
 
 @end

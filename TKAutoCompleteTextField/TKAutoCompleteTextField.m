@@ -276,8 +276,8 @@ static NSString *kObserverKeyEnableStrictFirstMatch = @"enableStrictFirstMatch";
     if (self.borderStyle != UITextBorderStyleNone) {
         height += self.frame.size.height;
     }
-    if ([self.autoCompleteDataSource respondsToSelector:@selector(heightForSuggestionView:)]) {
-        CGFloat maxHeight = [self.autoCompleteDataSource heightForSuggestionView:suggestionView];
+    if ([self.autoCompleteDataSource respondsToSelector:@selector(TKAutoCompleteTextField:heightForSuggestionView:)]) {
+        CGFloat maxHeight = [self.autoCompleteDataSource TKAutoCompleteTextField:self heightForSuggestionView:suggestionView];
         if (maxHeight < height) {
             height = maxHeight;
         }
@@ -287,8 +287,8 @@ static NSString *kObserverKeyEnableStrictFirstMatch = @"enableStrictFirstMatch";
 
 - (NSInteger)numberOfVisibleRowInSuggestionView:(UITableView *)suggestionView
 {
-    if ([self.autoCompleteDataSource respondsToSelector:@selector(numberOfVisibleRowInSuggestionView:)]) {
-        return [self.autoCompleteDataSource numberOfVisibleRowInSuggestionView:suggestionView];
+    if ([self.autoCompleteDataSource respondsToSelector:@selector(TKAutoCompleteTextField:numberOfVisibleRowInSuggestionView:)]) {
+        return [self.autoCompleteDataSource TKAutoCompleteTextField:self numberOfVisibleRowInSuggestionView:suggestionView];
     } else {
         return kDefaultNumberOfVisibleRowInSuggestionView;
     }
@@ -298,9 +298,9 @@ static NSString *kObserverKeyEnableStrictFirstMatch = @"enableStrictFirstMatch";
 {
     [self configureSuggestionViewForBorderStyle:self.borderStyle];
     [self.superview bringSubviewToFront:self];
-    UIView *rootView = self.window.subviews[0];
-    [rootView insertSubview:self.suggestionView
-               belowSubview:self];
+    [self.superview insertSubview:self.suggestionView
+                     belowSubview:self];
+    self.suggestionView.userInteractionEnabled = YES;
 }
 
 - (void)removeSuggestionView
@@ -317,9 +317,11 @@ static NSString *kObserverKeyEnableStrictFirstMatch = @"enableStrictFirstMatch";
             [self setBorderStyleRoundedRect];
             break;
         case UITextBorderStyleBezel:
+            self.backgroundColor = [UIColor whiteColor];
             [self setBorderStyleBezel];
             break;
         case UITextBorderStyleLine:
+            self.backgroundColor = [UIColor whiteColor];
             [self setBorderStyleLine];
             break;
         case UITextBorderStyleNone:
@@ -331,7 +333,7 @@ static NSString *kObserverKeyEnableStrictFirstMatch = @"enableStrictFirstMatch";
 - (void)setBorderStyleRoundedRect
 {
     CGFloat offsetHeight = self.frame.size.height;
-    [self.suggestionView.layer setCornerRadius:8.0];
+    [self.suggestionView.layer setCornerRadius:6.0];
     [self.suggestionView setScrollIndicatorInsets:UIEdgeInsetsMake(offsetHeight, 0, 0, 0)];
     [self.suggestionView setContentInset:UIEdgeInsetsMake(offsetHeight, 0, 0, 0)];
     [self.suggestionView.layer setBorderWidth:0.5];

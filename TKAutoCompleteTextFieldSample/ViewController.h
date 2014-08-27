@@ -11,6 +11,8 @@
 
 @interface ViewController : UIViewController
 
-@property (nonatomic, weak) IBOutlet TKAutoCompleteTextField *textField;
+@property (nonatomic, weak) IBOutlet TKAutoCompleteTextField *textFieldSample1;
+@property (nonatomic, weak) IBOutlet TKAutoCompleteTextField *textFieldSample2;
+@property (nonatomic, weak) IBOutlet TKAutoCompleteTextField *textFieldSample3;
 
 @end

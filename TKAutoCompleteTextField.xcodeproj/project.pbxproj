@@ -23,6 +23,7 @@
 		444C5B451997BFB60047B290 /* TKAutoCompleteTextFieldTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 444C5B441997BFB60047B290 /* TKAutoCompleteTextFieldTests.m */; };
 		444C5B59199A77290047B290 /* TKAutoCompleteTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 444C5B58199A77290047B290 /* TKAutoCompleteTextField.m */; };
 		44FD00C419A4FAA10099939F /* NYY.plist in Resources */ = {isa = PBXBuildFile; fileRef = 44FD00C319A4FAA10099939F /* NYY.plist */; };
+		44FD010B19AE34790099939F /* Japanese.plist in Resources */ = {isa = PBXBuildFile; fileRef = 44FD010A19AE34790099939F /* Japanese.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +61,7 @@
 		444C5B5A199A77420047B290 /* TKAutoCompleteTextFieldDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TKAutoCompleteTextFieldDataSource.h; sourceTree = "<group>"; };
 		444C5B5B199A79EF0047B290 /* TKAutoCompleteTextFieldDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TKAutoCompleteTextFieldDelegate.h; sourceTree = "<group>"; };
 		44FD00C319A4FAA10099939F /* NYY.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = NYY.plist; sourceTree = "<group>"; };
+		44FD010A19AE34790099939F /* Japanese.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Japanese.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +130,7 @@
 				444C5B311997BFB60047B290 /* Images.xcassets */,
 				444C5B201997BFB60047B290 /* Supporting Files */,
 				44FD00C319A4FAA10099939F /* NYY.plist */,
+				44FD010A19AE34790099939F /* Japanese.plist */,
 			);
 			path = TKAutoCompleteTextFieldSample;
 			sourceTree = "<group>";
@@ -251,6 +254,7 @@
 				444C5B321997BFB60047B290 /* Images.xcassets in Resources */,
 				444C5B241997BFB60047B290 /* InfoPlist.strings in Resources */,
 				444C5B2D1997BFB60047B290 /* Main.storyboard in Resources */,
+				44FD010B19AE34790099939F /* Japanese.plist in Resources */,
 				44FD00C419A4FAA10099939F /* NYY.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

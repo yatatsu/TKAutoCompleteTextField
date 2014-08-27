@@ -13,7 +13,9 @@
 @protocol TKAutoCompleteTextFieldDataSource <NSObject>
 
 @optional
-- (CGFloat)heightForSuggestionView:(UITableView *)suggestionView;
-- (NSInteger)numberOfVisibleRowInSuggestionView:(UITableView *)suggestionView;
+- (CGFloat)TKAutoCompleteTextField:(TKAutoCompleteTextField *)textField
+           heightForSuggestionView:(UITableView *)suggestionView;
+- (NSInteger)TKAutoCompleteTextField:(TKAutoCompleteTextField *)textField
+  numberOfVisibleRowInSuggestionView:(UITableView *)suggestionView;
 
 @end

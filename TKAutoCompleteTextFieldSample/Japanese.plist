@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<string>北海道</string>
+	<string>青森県</string>
+	<string>岩手県</string>
+	<string>宮城県</string>
+	<string>秋田県</string>
+	<string>山形県</string>
+	<string>福島県</string>
+	<string>新潟県</string>
+	<string>群馬県</string>
+	<string>栃木県</string>
+	<string>茨城県</string>
+	<string>埼玉県</string>
+	<string>千葉県</string>
+	<string>東京都</string>
+	<string>神奈川県</string>
+	<string>山梨県</string>
+	<string>静岡県</string>
+	<string>長野県</string>
+	<string>岐阜県</string>
+	<string>富山県</string>
+	<string>石川県</string>
+	<string>福井県</string>
+	<string>愛知県</string>
+	<string>滋賀県</string>
+	<string>三重県</string>
+	<string>奈良県</string>
+	<string>和歌山県</string>
+	<string>京都府</string>
+	<string>大阪府</string>
+	<string>兵庫県</string>
+	<string>岡山県</string>
+	<string>広島県</string>
+	<string>鳥取県</string>
+	<string>島根県</string>
+	<string>山口県</string>
+	<string>香川県</string>
+	<string>徳島県</string>
+	<string>愛媛県</string>
+	<string>高知県</string>
+	<string>福岡県</string>
+	<string>佐賀県</string>
+	<string>大分県</string>
+	<string>長崎県</string>
+	<string>熊本県</string>
+	<string>宮崎県</string>
+	<string>鹿児島県</string>
+	<string>沖縄県</string>
+</array>
+</plist>
