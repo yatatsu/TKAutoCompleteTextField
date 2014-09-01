@@ -3,7 +3,7 @@
 TKAutoCompleteTextField is UITextField with simple auto complete.
 It shows list of suggestion below textField when you input some character.
 
-![alt tag](https://github.com/yatatsu/TKAutoCompleteTextField/blob/master/TKAutoCompleteTextFieldSample.png = 300x)
+![alt tag](https://github.com/yatatsu/TKAutoCompleteTextField/blob/master/TKAutoCompleteTextFieldSample.png)
 
 ## Usage
 
