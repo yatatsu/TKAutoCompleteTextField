@@ -29,14 +29,15 @@ typedef NS_ENUM(NSInteger, TKAutoCompleteSampleType) {
     self.textFieldSample1.enableStrictFirstMatch = NO;
     
     // sample 2
-    self.textFieldSample2.suggestions = [self prefecture];
-    self.textFieldSample2.enableStrictFirstMatch = NO;
-    
-    // sample 3
-    self.textFieldSample3.suggestions = [self resourse];
+    self.textFieldSample2.suggestions = [self resourse];
+    self.textFieldSample2.enableStrictFirstMatch = YES;
     self.textFieldSample3.autoCompleteDelegate = self;
     self.textFieldSample3.autoCompleteDataSource = self;
-    self.textFieldSample3.enableStrictFirstMatch = YES;
+    
+    // sample 3
+    self.textFieldSample3.suggestions = [self prefecture];
+    self.textFieldSample3.enableStrictFirstMatch = NO;
+    self.textFieldSample3.enablePreInputSearch = YES;
 }
 
 - (void)didReceiveMemoryWarning
