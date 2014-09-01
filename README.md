@@ -3,7 +3,7 @@
 TKAutoCompleteTextField is UITextField with simple auto complete.
 It shows list of suggestion below textField when you input some character.
 
-![alt tag](https://github.com/yatatsu/TKAutoCompleteTextField/blob/master/TKAutoCompleteTextFieldSample.png)
+![alt tag](https://github.com/yatatsu/TKAutoCompleteTextField/blob/master/TKAutoCompleteTextFieldSample.png = 300x)
 
 ## Usage
 
@@ -16,6 +16,9 @@ self.autoCompleteTextField.suggestions = @[@"apple", @"orange", @"grape", @"lemo
 
 // you can select match type; left-hand match or partical match.
 self.autoCompleteTextField.enableStrictFirstMatch = YES; // default is NO
+
+// you can select whether or not suggestion in empty input.
+self.autoCompleteTextField.enablePreInputSearch = YES; // default is NO
 
 ```
 
