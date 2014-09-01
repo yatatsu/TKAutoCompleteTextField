@@ -17,6 +17,7 @@ static NSString *kObserverKeyMatchSuggestions = @"matchSuggestions";
 static NSString *kObserverKeyBorderStyle = @"borderStyle";
 static NSString *kObserverKeyEnableAutoComplete = @"enableAutoComplete";
 static NSString *kObserverKeyEnableStrictFirstMatch = @"enableStrictFirstMatch";
+static NSString *kObserverKeyEnablePreInputSearch = @"enablePreInputSearch";
 
 @interface TKAutoCompleteTextField () <UITableViewDataSource, UITableViewDelegate>
 
@@ -66,6 +67,7 @@ static NSString *kObserverKeyEnableStrictFirstMatch = @"enableStrictFirstMatch";
     self.inputFromSuggestion = NO;
     self.enableAutoComplete = YES;
     self.enableStrictFirstMatch = NO;
+    self.enablePreInputSearch = NO;
     
     [self configureSuggestionView];
 }
@@ -125,6 +127,8 @@ static NSString *kObserverKeyEnableStrictFirstMatch = @"enableStrictFirstMatch";
         [self didChangeEnableAutoComplete];
     } else if ([keyPath compare:kObserverKeyEnableStrictFirstMatch] == NSOrderedSame) {
         [self didChangeEnableStrictFirstMatch];
+    } else if ([keyPath compare:kObserverKeyEnablePreInputSearch] == NSOrderedSame) {
+        [self didChangeEnablePreInputSearch];
     }
 }
 
@@ -133,6 +137,9 @@ static NSString *kObserverKeyEnableStrictFirstMatch = @"enableStrictFirstMatch";
 - (BOOL)becomeFirstResponder
 {
     [self startObserving];
+    if ([self enablePreInputSearch]) {
+        [self searchSuggestionWithInput:self.text];
+    }
     return [super becomeFirstResponder];
 }
 
@@ -196,6 +203,14 @@ static NSString *kObserverKeyEnableStrictFirstMatch = @"enableStrictFirstMatch";
     }
 }
 
+- (void)didChangeEnablePreInputSearch
+{
+    if ([self isFirstResponder]) {
+        [self cancelSearchOperation];
+        [self searchSuggestionWithInput:self.text];
+    }
+}
+
 #pragma mark - fetch suggestion
 
 - (void)cancelSearchOperation
@@ -227,6 +242,8 @@ static NSString *kObserverKeyEnableStrictFirstMatch = @"enableStrictFirstMatch";
                     }
                 }];
             }
+        } else if ([self enablePreInputSearch]) {
+            [resultSuggestions addObjectsFromArray:suggestions];
         }
     }];
     [operation setCompletionBlock:^{

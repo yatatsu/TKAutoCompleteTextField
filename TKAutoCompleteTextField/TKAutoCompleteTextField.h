@@ -18,6 +18,7 @@
 // options
 @property (nonatomic, assign) BOOL enableAutoComplete; // YES in default
 @property (nonatomic, assign) BOOL enableStrictFirstMatch; // NO in default
+@property (nonatomic, assign) BOOL enablePreInputSearch; // NO in default
 
 // delegate
 @property (nonatomic, weak) id<TKAutoCompleteTextFieldDataSource> autoCompleteDataSource;
