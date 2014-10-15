@@ -14,6 +14,7 @@
 
 // ui
 @property (nonatomic, strong, readonly) UITableView *suggestionView;
+@property (nonatomic, weak) UIView *overView;
 
 // options
 @property (nonatomic, assign) BOOL enableAutoComplete; // YES in default

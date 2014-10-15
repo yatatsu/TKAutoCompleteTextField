@@ -111,10 +111,15 @@ static NSString *kObserverKeyEnablePreInputSearch = @"enablePreInputSearch";
 - (void)stopObserving
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self removeObserver:self forKeyPath:kObserverKeyMatchSuggestions];
-    [self removeObserver:self forKeyPath:kObserverKeyBorderStyle];
-    [self removeObserver:self forKeyPath:kObserverKeyEnableAutoComplete];
-    [self removeObserver:self forKeyPath:kObserverKeyEnableStrictFirstMatch];
+    @try {
+        [self removeObserver:self forKeyPath:kObserverKeyMatchSuggestions];
+        [self removeObserver:self forKeyPath:kObserverKeyBorderStyle];
+        [self removeObserver:self forKeyPath:kObserverKeyEnableAutoComplete];
+        [self removeObserver:self forKeyPath:kObserverKeyEnableStrictFirstMatch];
+    }
+    @catch (NSException *exception) {
+        // wasn't observing anyway
+    }
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -314,9 +319,16 @@ static NSString *kObserverKeyEnablePreInputSearch = @"enablePreInputSearch";
 - (void)showSuggestionView
 {
     [self configureSuggestionViewForBorderStyle:self.borderStyle];
-    [self.superview bringSubviewToFront:self];
-    [self.superview insertSubview:self.suggestionView
-                     belowSubview:self];
+    if (_overView) {
+        CGPoint pt = [_overView convertPoint:self.frame.origin fromView:self.superview];
+        _suggestionView.frame = CGRectMake(pt.x, pt.y+self.frame.size.height,
+                                           _suggestionView.frame.size.width, _suggestionView.frame.size.height);
+        [_overView addSubview:_suggestionView];
+    } else {
+        [self.superview bringSubviewToFront:self];
+        [self.superview insertSubview:self.suggestionView
+                         belowSubview:self];
+    }
     self.suggestionView.userInteractionEnabled = YES;
 }
 
