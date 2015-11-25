@@ -16,6 +16,10 @@
 @property (nonatomic, strong, readonly) UITableView *suggestionView;
 @property (nonatomic, weak) UIView *overView;
 
+@property (nonatomic, assign) NSInteger marginLefTextPlaceholder;
+@property (nonatomic, assign) NSInteger marginTopTextPlaceholder;
+
+
 // options
 @property (nonatomic, assign) BOOL enableAutoComplete; // YES in default
 @property (nonatomic, assign) BOOL enableStrictFirstMatch; // NO in default
@@ -26,5 +30,7 @@
 @property (nonatomic, weak) id<TKAutoCompleteTextFieldDelegate> autoCompleteDelegate;
 
 @property (nonatomic, strong) NSArray *suggestions;
+
+
 
 @end

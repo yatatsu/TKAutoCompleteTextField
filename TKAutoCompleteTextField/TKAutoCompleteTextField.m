@@ -19,6 +19,9 @@ static NSString *kObserverKeyEnableAutoComplete = @"enableAutoComplete";
 static NSString *kObserverKeyEnableStrictFirstMatch = @"enableStrictFirstMatch";
 static NSString *kObserverKeyEnablePreInputSearch = @"enablePreInputSearch";
 
+static NSInteger kDefaultLeftMarginTextPlaceholder = 5;
+static NSInteger kDefaultTopMarginTextPlaceholder = 0;
+
 @interface TKAutoCompleteTextField () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong, readwrite) UITableView *suggestionView;
@@ -68,6 +71,8 @@ static NSString *kObserverKeyEnablePreInputSearch = @"enablePreInputSearch";
     self.enableAutoComplete = YES;
     self.enableStrictFirstMatch = NO;
     self.enablePreInputSearch = NO;
+    self.marginLefTextPlaceholder = kDefaultLeftMarginTextPlaceholder;
+    self.marginTopTextPlaceholder = kDefaultTopMarginTextPlaceholder;
     
     [self configureSuggestionView];
 }
@@ -399,6 +404,17 @@ static NSString *kObserverKeyEnablePreInputSearch = @"enablePreInputSearch";
     self.suggestionView.frame = frame;
     [self.suggestionView.layer setBorderWidth:0.5];
     [self.suggestionView.layer setBorderColor:[UIColor lightGrayColor].CGColor];
+}
+
+
+// placeholder position
+- (CGRect)textRectForBounds:(CGRect)bounds {
+    return CGRectInset(bounds, self.marginLefTextPlaceholder, self.marginTopTextPlaceholder);
+}
+
+// text position
+- (CGRect)editingRectForBounds:(CGRect)bounds {
+    return CGRectInset(bounds, self.marginLefTextPlaceholder, self.marginTopTextPlaceholder);
 }
 
 #pragma mark - UITableViewDataSource
