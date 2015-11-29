@@ -31,8 +31,9 @@ typedef NS_ENUM(NSInteger, TKAutoCompleteSampleType) {
     // sample 2
     self.textFieldSample2.suggestions = [self resourse];
     self.textFieldSample2.enableStrictFirstMatch = YES;
-    self.textFieldSample3.autoCompleteDelegate = self;
-    self.textFieldSample3.autoCompleteDataSource = self;
+    self.textFieldSample2.autoCompleteDelegate = self;
+    self.textFieldSample2.autoCompleteDataSource = self;
+    self.textFieldSample2.marginLefTextPlaceholder = 2;
     
     // sample 3
     self.textFieldSample3.suggestions = [self prefecture];
