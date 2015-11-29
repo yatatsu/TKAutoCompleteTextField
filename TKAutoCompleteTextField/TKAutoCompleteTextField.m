@@ -79,9 +79,9 @@ static CGFloat kDefaultTopMarginTextPlaceholder = 0.f;
 
 - (void)dealloc
 {
-    self.matchSuggestions = nil;
     [self stopObserving];
     [self removeSuggestionView];
+    self.matchSuggestions = nil;
 }
 
 #pragma mark - Observation
