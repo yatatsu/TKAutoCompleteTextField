@@ -1,5 +1,9 @@
 # TKAutoCompleteTextField
 
+[![Version](https://img.shields.io/cocoapods/v/TKAutoCompleteTextField.svg?style=flat)](http://cocoadocs.org/docsets/TKAutoCompleteTextField)
+[![License](https://img.shields.io/cocoapods/l/TKAutoCompleteTextField.svg?style=flat)](http://cocoadocs.org/docsets/TKAutoCompleteTextField)
+[![Platform](https://img.shields.io/cocoapods/p/TKAutoCompleteTextField.svg?style=flat)](http://cocoadocs.org/docsets/TKAutoCompleteTextField)
+
 TKAutoCompleteTextField is UITextField with simple auto complete.
 It shows list of suggestion below textField when you input some character.
 
@@ -26,11 +30,19 @@ it's all.
 
 ## Other
 
-these delegate methods are all optional.
+### Delegates
 
 - ``TKAutoCompleteTextField:heightForSuggestionView:`` : specify max height.
 - ``TKAutoCompleteTextField:numberOfVisibleRowInSuggestionView:`` : specify limit of visible suggestion count.
   - default count is 3.
+
+### properties
+
+- ``enableAutoComplete`` : show suggestion view.
+- ``enableStrictFirstMatch`` : left-hand match or partical match.
+- ``enablePreInputSearch`` : show suggestion view when input is empty.
+- ``marginLefTextPlaceholder``
+- ``marginTopTextPlaceholder``
 
 ## auther
 
