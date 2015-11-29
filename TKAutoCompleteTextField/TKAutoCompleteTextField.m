@@ -19,8 +19,8 @@ static NSString *kObserverKeyEnableAutoComplete = @"enableAutoComplete";
 static NSString *kObserverKeyEnableStrictFirstMatch = @"enableStrictFirstMatch";
 static NSString *kObserverKeyEnablePreInputSearch = @"enablePreInputSearch";
 
-static NSInteger kDefaultLeftMarginTextPlaceholder = 5;
-static NSInteger kDefaultTopMarginTextPlaceholder = 0;
+static CGFloat kDefaultLeftMarginTextPlaceholder = 5.f;
+static CGFloat kDefaultTopMarginTextPlaceholder = 0.f;
 
 @interface TKAutoCompleteTextField () <UITableViewDataSource, UITableViewDelegate>
 

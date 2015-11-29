@@ -16,8 +16,8 @@
 @property (nonatomic, strong, readonly) UITableView *suggestionView;
 @property (nonatomic, weak) UIView *overView;
 
-@property (nonatomic, assign) NSInteger marginLefTextPlaceholder;
-@property (nonatomic, assign) NSInteger marginTopTextPlaceholder;
+@property (nonatomic, assign) CGFloat marginLefTextPlaceholder;
+@property (nonatomic, assign) CGFloat marginTopTextPlaceholder;
 
 
 // options
