@@ -1,7 +1,7 @@
 # coding: utf-8
 Pod::Spec.new do |s|
   s.name         = "TKAutoCompleteTextField"
-  s.version      = "0.2.0"
+  s.version      = "0.3.0"
   s.summary      = "Simple auto completion with UITextField"
 
   s.homepage     = "https://github.com/yatatsu/TKAutoCompleteTextField"
@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.platform     = :ios
   s.ios.deployment_target = "6.0"
 
-  s.source       = { :git => "https://github.com/yatatsu/TKAutoCompleteTextField.git", :tag => "0.2.0" }
+  s.source       = { :git => "https://github.com/yatatsu/TKAutoCompleteTextField.git", :tag => "0.3.0" }
 
   s.source_files  = "TKAutoCompleteTextField/*.{h,m}"
   s.exclude_files = "TKAutoCompleteTextFieldSample", "TKAutoCompleteTextFieldTests"
