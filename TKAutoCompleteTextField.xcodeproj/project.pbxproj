@@ -24,6 +24,7 @@
 		444C5B59199A77290047B290 /* TKAutoCompleteTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 444C5B58199A77290047B290 /* TKAutoCompleteTextField.m */; };
 		44FD00C419A4FAA10099939F /* NYY.plist in Resources */ = {isa = PBXBuildFile; fileRef = 44FD00C319A4FAA10099939F /* NYY.plist */; };
 		44FD010B19AE34790099939F /* Japanese.plist in Resources */ = {isa = PBXBuildFile; fileRef = 44FD010A19AE34790099939F /* Japanese.plist */; };
+		85184CD41C0B4C9C00E953E6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85184CD31C0B4C9C00E953E6 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +63,7 @@
 		444C5B5B199A79EF0047B290 /* TKAutoCompleteTextFieldDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TKAutoCompleteTextFieldDelegate.h; sourceTree = "<group>"; };
 		44FD00C319A4FAA10099939F /* NYY.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = NYY.plist; sourceTree = "<group>"; };
 		44FD010A19AE34790099939F /* Japanese.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Japanese.plist; sourceTree = "<group>"; };
+		85184CD31C0B4C9C00E953E6 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +127,7 @@
 				444C5B281997BFB60047B290 /* AppDelegate.h */,
 				444C5B291997BFB60047B290 /* AppDelegate.m */,
 				444C5B2B1997BFB60047B290 /* Main.storyboard */,
+				85184CD31C0B4C9C00E953E6 /* LaunchScreen.storyboard */,
 				444C5B2E1997BFB60047B290 /* ViewController.h */,
 				444C5B2F1997BFB60047B290 /* ViewController.m */,
 				444C5B311997BFB60047B290 /* Images.xcassets */,
@@ -219,7 +222,7 @@
 		444C5B0E1997BFB60047B290 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "Tatsuya Kitagawa";
 				TargetAttributes = {
 					444C5B361997BFB60047B290 = {
@@ -254,6 +257,7 @@
 				444C5B321997BFB60047B290 /* Images.xcassets in Resources */,
 				444C5B241997BFB60047B290 /* InfoPlist.strings in Resources */,
 				444C5B2D1997BFB60047B290 /* Main.storyboard in Resources */,
+				85184CD41C0B4C9C00E953E6 /* LaunchScreen.storyboard in Resources */,
 				44FD010B19AE34790099939F /* Japanese.plist in Resources */,
 				44FD00C419A4FAA10099939F /* NYY.plist in Resources */,
 			);
@@ -345,6 +349,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -405,6 +410,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TKAutoCompleteTextFieldSample/TKAutoCompleteTextField-Prefix.pch";
 				INFOPLIST_FILE = "TKAutoCompleteTextFieldSample/TKAutoCompleteTextField-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yatatsukitagawa.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -418,6 +424,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TKAutoCompleteTextFieldSample/TKAutoCompleteTextField-Prefix.pch";
 				INFOPLIST_FILE = "TKAutoCompleteTextFieldSample/TKAutoCompleteTextField-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yatatsukitagawa.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -439,6 +446,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "TKAutoCompleteTextFieldTests/TKAutoCompleteTextFieldTests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yatatsukitagawa.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
@@ -457,6 +465,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TKAutoCompleteTextField/TKAutoCompleteTextField-Prefix.pch";
 				INFOPLIST_FILE = "TKAutoCompleteTextFieldTests/TKAutoCompleteTextFieldTests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yatatsukitagawa.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
