@@ -268,6 +268,12 @@ static CGFloat kDefaultTopMarginTextPlaceholder = 0.f;
 
 #pragma mark - suggestionView
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    CGRect frame = self.suggestionView.frame;
+    self.suggestionView.frame = CGRectMake(frame.origin.x, frame.origin.y, self.bounds.size.width, frame.size.height);
+}
+
 - (void)configureSuggestionView
 {
     CGRect frame = self.frame;
